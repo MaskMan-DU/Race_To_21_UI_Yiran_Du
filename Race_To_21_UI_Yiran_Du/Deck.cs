@@ -9,10 +9,6 @@ namespace Race_To_21_UI_Yiran_Du
         private List<Card> cards = new List<Card>(); // To store a deck of cards
         private Dictionary<string, string> cardImages = new Dictionary<string, string>(); // Adjust: Create a Dictionary that associates each card “ID” with one of the card image file names (as a String)
 
-        public Deck()
-        {          
-        }
-
         // Add a new method, this method will be used build a new deck
         /// <summary>
         /// Re-create a deck of cards
@@ -23,7 +19,7 @@ namespace Race_To_21_UI_Yiran_Du
             Console.WriteLine("*********** Building deck...");
             cards = new List<Card>();
             cardImages = new Dictionary<string, string>();
-            string[] suits = { "Spades", "Hearts", "Clubs", "Diamands" };
+            string[] suits = { "Spades", "Hearts", "Clubs", "Diamonds" };
 
             for (int cardVal = 1; cardVal <= 13; cardVal++)
             {
@@ -60,7 +56,7 @@ namespace Race_To_21_UI_Yiran_Du
                             cardImageName = cardVal.ToString().PadLeft(2, '0');
                             break;
                     }
-                    cards.Add(new Card((cardName + cardSuit.First<char>()), (cardLongName + " of " + cardSuit)));
+                    cards.Add(new Card((cardName + cardSuit.First<char>()), ("card_" + cardSuit.ToLower() + "_" + cardImageName + ".png")));
                     cardImages.Add(cardName + cardSuit.First<char>(), "card_" + cardSuit.ToLower() + "_" + cardImageName + ".png"); // Add 52 dictionaries
                 }
             }

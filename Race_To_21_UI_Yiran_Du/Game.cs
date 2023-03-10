@@ -3,26 +3,23 @@ using System.Collections.Generic;
 
 namespace Race_To_21_UI_Yiran_Du
 {
-    public class Game
+    public static class Game
     {
-        private int numberOfPlayers; // number of players in current game
-        private List<Player> players = new List<Player>(); // list of objects containing player data
-        
-        private List<Player> giveUpPlayers = new List<Player>(); // To keep the data of players who give up
+        public static int numberOfPlayers; // number of players in current game
+        public static List<Player> players = new List<Player>(); // list of objects containing player data
 
-        private CardTable cardTable; // object in charge of displaying game information
-        private Deck deck = new Deck(); // deck of cards
-        private int currentPlayer = 0; // current player on list
-        public Tasks nextTask; // keeps track of game state
-        private readonly bool cheating = false; // lets you cheat for testing purposes if true
-        public bool Cheating { get { return cheating; } } // Use this to keep "cheating" readonly
+        private static List<Player> giveUpPlayers = new List<Player>(); // To keep the data of players who give up
+        private static Deck deck = new Deck(); // deck of cards
+        private static int currentPlayer = 0; // current player on list
+        public static Tasks nextTask; // keeps track of game state
+        private static readonly bool cheating = false; // lets you cheat for testing purposes if true
+        public static bool Cheating { get { return cheating; } } // Use this to keep "cheating" readonly
 
-        private int highPoints = 0; // Implementation: Set a variable to keep track the high points (part of Level2)
-        private int pointsToGameOver = 60; // Implementation: Set a variable to determine the score that needs to be reached to end the game
+        private static int highPoints = 0; // Implementation: Set a variable to keep track the high points (part of Level2)
+        private static int pointsToGameOver = 60; // Implementation: Set a variable to determine the score that needs to be reached to end the game
 
-        public Game(CardTable c)
+        public static void SetUpGame()
         {
-            cardTable = c;
             deck.buildDeck();
             deck.Shuffle();
             // deck.ShowAllCards();
@@ -56,9 +53,12 @@ namespace Race_To_21_UI_Yiran_Du
         /* Adds a player to the current game
          * Called by DoNextTask() method
          */
-        private void AddPlayer(string n)
-        {
-            players.Add(new Player(n));
+        public static void AddPlayer(string n)
+        { 
+            if (players.Count < numberOfPlayers)
+            {
+                players.Add(new Player(n));
+            }     
         }
 
         /* Figures out what task to do next in game
@@ -66,31 +66,31 @@ namespace Race_To_21_UI_Yiran_Du
          * Calls methods required to complete task
          * then sets nextTask.
          */
-        public void DoNextTask()
+        public static void DoNextTask()
         {
             Console.WriteLine("================================"); // this line should be elsewhere right?
             if (nextTask == Tasks.GetNumberOfPlayers)
             {
-                numberOfPlayers = cardTable.GetNumberOfPlayers();
+                numberOfPlayers = CardTable.GetNumberOfPlayers();
                 nextTask = Tasks.GetNames;
             }
             else if (nextTask == Tasks.GetNames)
             {
                 for (var count = 1; count <= numberOfPlayers; count++)
                 {
-                    var name = cardTable.GetPlayerName(count);
+                    var name = CardTable.GetPlayerName(count);
                     AddPlayer(name); // NOTE: player list will start from 0 index even though we use 1 for our count here to make the player numbering more human-friendly
                 }
                 nextTask = Tasks.IntroducePlayers;
             }
             else if (nextTask == Tasks.IntroducePlayers)
             {
-                cardTable.ShowPlayers(players);
+                CardTable.ShowPlayers(players);
                 nextTask = Tasks.PlayerTurn;
             }
             else if (nextTask == Tasks.PlayerTurn)
             {
-                cardTable.ShowHands(players);
+                CardTable.ShowHands(players);
                 Player player = players[currentPlayer];
                 if (player.status == PlayerStatus.active)
                 {
@@ -98,7 +98,7 @@ namespace Race_To_21_UI_Yiran_Du
                      * A player can choose to draw up to 3 cards each turn, but they get
                      * all cards at once; they don’t get to decide after each card
                      */
-                    int drawnCardNumber = cardTable.OfferHowManyCards(player);
+                    int drawnCardNumber = CardTable.OfferHowManyCards(player);
 
                     if (drawnCardNumber != 0) // If the player want to draw cards
                     {
@@ -118,18 +118,18 @@ namespace Race_To_21_UI_Yiran_Du
 
                                 int losePoints = player.score - 21; // Implementation: If the player is bust, the player loses points equal to their hand total minus 21. (Level 2)
                                 player.points -= losePoints;
-                                cardTable.ShowHand(player);
+                                CardTable.ShowHand(player);
 
                         }
                         else if (player.score == 21) // The player win
                         {
                                 player.status = PlayerStatus.win;
-                                cardTable.ShowHand(player);
+                                CardTable.ShowHand(player);
 
                         }
                         else // The player still active
                         {
-                            cardTable.ShowHand(player);                            
+                            CardTable.ShowHand(player);                            
                             while (true)
                             {
                                 Console.Write("Do you want to stay? (Y/N)");
@@ -178,12 +178,12 @@ namespace Race_To_21_UI_Yiran_Du
                     // Adjust: Put the winner detection out of the AnnounceWinner method. If no player draws card, the game will not stop.
                     if (winner != null) // If there is a winner
                     {
-                        cardTable.AnnounceWinner(winner);
+                        CardTable.AnnounceWinner(winner);
                         IsContinue(); // Check if the game can still continue
                     }
                     else // There is no winner
                     {
-                        cardTable.resultForNoDrawnCard(); // Add a new method to told all players that nobody draws card.
+                        CardTable.resultForNoDrawnCard(); // Add a new method to told all players that nobody draws card.
                         // Reset all players status
                         foreach (var player in players)
                         {
@@ -226,7 +226,7 @@ namespace Race_To_21_UI_Yiran_Du
         /// <param name="player">The player's data</param>
         /// <returns>the total score of the player's hand</returns>
         /// Is called by DoNextTask() method
-        private int ScoreHand(Player player)
+        private static int ScoreHand(Player player)
         {
             int score = 0;
 
@@ -270,7 +270,7 @@ namespace Race_To_21_UI_Yiran_Du
         /// </summary>
         /// <returns>Return the judgment, if there is an active player, it is true, if not, it is false</returns>
         /// Is called by DoNextTask() method
-        private bool CheckActivePlayers()
+        private static bool CheckActivePlayers()
         {
             // Adjust: When check the first winner, end the game
             foreach (var player in players)
@@ -315,12 +315,12 @@ namespace Race_To_21_UI_Yiran_Du
         /// </summary>
         /// <returns>The winner's data</returns>
         /// Is called by DoNextTask() method
-        private Player DoFinalScoring()
+        private static Player DoFinalScoring()
         {
             int highScore = 0; // Fix: reset this value
             foreach (var player in players)
             {
-                cardTable.ShowHand(player);
+                CardTable.ShowHand(player);
                 if (player.status == PlayerStatus.win) // someone hit 21
                 {
                     return player;
@@ -363,7 +363,7 @@ namespace Race_To_21_UI_Yiran_Du
         /// Check if the game can still continue. If it continues, then each player is asked to decide whether to continue with the next round
         /// </summary>
         /// Is called by DoNextTask() method
-        private void IsContinue()
+        private static void IsContinue()
         {
             
             int lastTotalPlayers = players.Count;
@@ -482,7 +482,7 @@ namespace Race_To_21_UI_Yiran_Du
         /// Shuffle player list
         /// </summary>
         /// Is called by DoNextTask() method
-        private void shufflePlayer()
+        private static void shufflePlayer()
         {
             Random rng = new Random();
 
@@ -492,6 +492,53 @@ namespace Race_To_21_UI_Yiran_Du
                 int swapindex = rng.Next(players.Count);
                 players[i] = players[swapindex];
                 players[swapindex] = tmp;
+            }
+        }
+
+
+
+        public static void DrawCards(int currentPlayer, int drawnCardNumber)
+        {
+            Player player = players[currentPlayer];
+            if (player.status == PlayerStatus.active)
+            {
+                /* Implementation:
+                 * A player can choose to draw up to 3 cards each turn, but they get
+                 * all cards at once; they don’t get to decide after each card
+                 */
+                if (drawnCardNumber != 0) // If the player want to draw cards
+                {
+
+                    for (int i = 0; i < drawnCardNumber; i++) // Draw the number of cards indicated by the player
+                    {
+                        Card card = deck.DealTopCard();
+                        player.cards.Add(card);
+                    }
+
+                    player.score = ScoreHand(player);
+
+
+                    if (player.score > 21) // The player bust
+                    {
+                        player.status = PlayerStatus.bust;
+
+                        int losePoints = player.score - 21; // Implementation: If the player is bust, the player loses points equal to their hand total minus 21. (Level 2)
+                        player.points -= losePoints;
+                        CardTable.ShowHand(player);
+
+                    }
+                    else if (player.score == 21) // The player win
+                    {
+                        player.status = PlayerStatus.win;
+                        CardTable.ShowHand(player);
+
+                    }
+                }
+                else // The player do not want to draw cards at the beginning of the round.
+                {
+                    player.status = PlayerStatus.stay;
+                }
+
             }
         }
     }

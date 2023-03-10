@@ -14,6 +14,7 @@ namespace Race_To_21_UI_Yiran_Du
         public string Id { get { return id; } } // Encapsulation
         public string FullName { get { return fullName; } } // Encapsulation
 
+
         public Card (string shortName,string longName)
         {
             id = shortName;

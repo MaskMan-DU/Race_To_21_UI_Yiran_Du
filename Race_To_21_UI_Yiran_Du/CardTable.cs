@@ -3,19 +3,14 @@ using System.Collections.Generic;
 
 namespace Race_To_21_UI_Yiran_Du
 {
-    public class CardTable
+    public static class CardTable
     {
-        public CardTable()
-        {
-            Console.WriteLine("Setting Up Table...");
-        }
-
         /* Shows the name of each player and introduces them by table position.
          * Is called by Game object.
          * Game object provides list of players.
          * Calls Introduce method on each player object.
          */
-        public void ShowPlayers(List<Player> players)
+        public static void ShowPlayers(List<Player> players)
         {
             for (int i = 0; i < players.Count; i++)
             {
@@ -27,7 +22,7 @@ namespace Race_To_21_UI_Yiran_Du
          * Is called by Game object.
          * Returns number of players to Game object.
          */
-        public int GetNumberOfPlayers()
+        public static int GetNumberOfPlayers()
         {
             Console.Write("How many players? ");
             string response = Console.ReadLine();
@@ -47,7 +42,7 @@ namespace Race_To_21_UI_Yiran_Du
          * Game object provides player number
          * Returns name of a player to Game object
          */
-        public string GetPlayerName(int playerNum)
+        public static string GetPlayerName(int playerNum)
         {
             Console.Write("What is the name of player# " + playerNum + "? ");
             string response = Console.ReadLine();
@@ -66,7 +61,7 @@ namespace Race_To_21_UI_Yiran_Du
         /// <param name="player">Game object provides the player's data</param>
         /// <returns>The number of cards the player want to draw</returns>
         /// Is called by Game object
-        public int OfferHowManyCards(Player player)
+        public static int OfferHowManyCards(Player player)
         {
             while (true)
             {
@@ -95,7 +90,7 @@ namespace Race_To_21_UI_Yiran_Du
         /// </summary>
         /// <param name="player">Game object provides the player's data</param>
         /// Is called by Game object
-        public void ShowHand(Player player)
+        public static void ShowHand(Player player)
         {   
             if (player.cards.Count > 0) // When the player has cards, running the following code
             {
@@ -126,7 +121,7 @@ namespace Race_To_21_UI_Yiran_Du
         /// </summary>
         /// <param name="players">Game object provides list of players</param>
         /// Is called by Game object
-        public void ShowHands(List<Player> players)
+        public static void ShowHands(List<Player> players)
         {
             foreach (Player player in players)
             {
@@ -139,7 +134,7 @@ namespace Race_To_21_UI_Yiran_Du
         /// </summary>
         /// <param name="player">Game object provides the player's data</param>
         /// Is called by Game object
-        public void AnnounceWinner(Player player)
+        public static void AnnounceWinner(Player player)
         {
             // Remove the detection here
 
@@ -153,7 +148,7 @@ namespace Race_To_21_UI_Yiran_Du
         /// Type the text "No player draws card!"
         /// </summary>
         /// Is called by Game object
-        public void resultForNoDrawnCard()
+        public static void resultForNoDrawnCard()
         {
             Console.WriteLine("No player draws card!");
         }
