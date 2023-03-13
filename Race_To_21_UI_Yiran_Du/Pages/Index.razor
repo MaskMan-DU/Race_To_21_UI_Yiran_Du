@@ -144,179 +144,183 @@
             }
 
 
+            <div class="row justify-content-center">
+                <input type="range" min="0" max="3" @bind="drawCardsNumber" />
+                <div class="col-2">@drawCardsNumber</div>
+            </div>
 
-            <input class="justify-content-center" type="range" min="0" max="3" @bind="drawCardsNumber" />
-            <div class="col-2">@drawCardsNumber</div>
 
             <div class="text-center">
                 Player "@Game.players[Game.currentPlayer].Name" draw cards!
             </div>
 
-            <button type="button" class="btn btn-primary mt-3" @onclick="() => { PlayerDrawCards(drawCardsNumber); CheckWinner(); }">
-                Draw Cards
-            </button>
+            <div class="row justify-content-center">
+                <button type="button" class="btn btn-primary mt-3" @onclick="() => { PlayerDrawCards(drawCardsNumber); CheckWinner(); }">
+                    Draw Cards
+                </button>
+            </div>
+
 
             break;
 
         case Tasks.CheckForEnd:
 
-            @if (Game.highPoints < Game.pointsToGameOver)
+            @if (Game.players.Count < 5)
             {
-                @if (Game.players.Count < 5)
-                {
-                    <table class="table table-bordered justify-content-center">
-                        @foreach (Player player in Game.players)
-                        {
-                            <td class="col-3 justify-content-center">
-                            <tr class="border">@player.Name</tr>
-                            <tr class="border">@player.status</tr>
-                            <tr class="border">
+                <table class="table table-bordered justify-content-center">
+                    @foreach (Player player in Game.players)
+                    {
+                        <td class="col-3 justify-content-center">
+                        <tr class="border">@player.Name</tr>
+                        <tr class="border">@player.status</tr>
+                        <tr class="border">
 
-                                <div class="text-center">
-                                    Hands:
-                                </div>
+                            <div class="text-center">
+                                Hands:
+                            </div>
 
 
-                                @foreach (Card card in player.cards)
-                                {
+                            @foreach (Card card in player.cards)
+                            {
 
-                                    <img src="card_assets/@card.FullName" />
+                                <img src="card_assets/@card.FullName" />
 
-                                }
-
-
-                            </tr>
-                            <tr class="border">Score: @player.score</tr>
-                            <tr class="border">Points: @player.points</tr>
-                            </td>
-                        }
-                    </table>
-                }
-                else
-                {
-                    <table class="table table-bordered justify-content-center">
-                        @for (int i = 0; i < 4; i++)
-                        {
-                            <td class="col-3 justify-content-center">
-                            <tr class="border">@Game.players[i].Name</tr>
-                            <tr class="border">@Game.players[i].status</tr>
-                            <tr class="border">
-
-                                <div class="text-center">
-                                    Hands:
-                                </div>
+                            }
 
 
-                                @foreach (Card card in Game.players[i].cards)
-                                {
-
-                                    <img src="card_assets/@card.FullName" />
-
-                                }
-
-
-                            </tr>
-                            <tr class="border">Score: @Game.players[i].score</tr>
-                            <tr class="border">Points: @Game.players[i].points</tr>
-                            </td>
-                        }
-                    </table>
-
-                    <table class="table table-bordered justify-content-center">
-                        @for (int i = 4; i < Game.players.Count; i++)
-                        {
-                            <td class="col-3 justify-content-center">
-                            <tr class="border">@Game.players[i].Name</tr>
-                            <tr class="border">@Game.players[i].status</tr>
-                            <tr class="border">
-
-                                <div class="text-center">
-                                    Hands:
-                                </div>
-
-
-                                @foreach (Card card in Game.players[i].cards)
-                                {
-
-                                    <img src="card_assets/@card.FullName" />
-
-                                }
-
-
-                            </tr>
-                            <tr class="border">Score: @Game.players[i].score</tr>
-                            <tr class="border">Points: @Game.players[i].points</tr>
-                            </td>
-                        }
-                    </table>
-
-                }
-
-                <br />
-
-                <h2 class="text-center">
-                    Do you want to play another round?
-                </h2>
-
-
-
-                for (int i = 0; i < Game.players.Count; i++)
-                {
-                    int playerIndex = i;
-                    <label for="@playerIndex" class="col-sm-6 col-form-label text-sm-right">
-                        @Game.players[playerIndex].Name
-                    </label>
-
-                    <input type="checkbox" @bind="Game.players[playerIndex].isContinue" />
-
-                }
-
-                <div class="justify-content-center">
-                    <button type="button" class="btn btn-primary mt-3" @onclick="ReBuildPlayerList">
-                        Next
-                    </button>
-                </div>
+                        </tr>
+                        <tr class="border">Score: @player.score</tr>
+                        <tr class="border">Points: @player.points</tr>
+                        </td>
+                    }
+                </table>
             }
             else
             {
-                Game.nextTask = Tasks.GameOver;
+                <table class="table table-bordered justify-content-center">
+                    @for (int i = 0; i < 4; i++)
+                    {
+                        <td class="col-3 justify-content-center">
+                        <tr class="border">@Game.players[i].Name</tr>
+                        <tr class="border">@Game.players[i].status</tr>
+                        <tr class="border">
+
+                            <div class="text-center">
+                                Hands:
+                            </div>
+
+
+                            @foreach (Card card in Game.players[i].cards)
+                            {
+
+                                <img src="card_assets/@card.FullName" />
+
+                            }
+
+
+                        </tr>
+                        <tr class="border">Score: @Game.players[i].score</tr>
+                        <tr class="border">Points: @Game.players[i].points</tr>
+                        </td>
+                    }
+                </table>
+
+                <table class="table table-bordered justify-content-center">
+                    @for (int i = 4; i < Game.players.Count; i++)
+                    {
+                        <td class="col-3 justify-content-center">
+                        <tr class="border">@Game.players[i].Name</tr>
+                        <tr class="border">@Game.players[i].status</tr>
+                        <tr class="border">
+
+                            <div class="text-center">
+                                Hands:
+                            </div>
+
+
+                            @foreach (Card card in Game.players[i].cards)
+                            {
+
+                                <img src="card_assets/@card.FullName" />
+
+                            }
+
+
+                        </tr>
+                        <tr class="border">Score: @Game.players[i].score</tr>
+                        <tr class="border">Points: @Game.players[i].points</tr>
+                        </td>
+                    }
+                </table>
+
             }
+
+            <br />
+
+            <h2 class="text-center">
+                Do you want to play another round?
+            </h2>
+
+
+
+            for (int i = 0; i < Game.players.Count; i++)
+            {
+                int playerIndex = i;
+                <label for="@playerIndex" class="col-sm-6 col-form-label text-sm-right">
+                    @Game.players[playerIndex].Name
+                </label>
+
+                <input type="checkbox" @bind="Game.players[playerIndex].isContinue" />
+
+            }
+
+            <div class="row justify-content-center">
+                <button type="button" class="btn btn-primary mt-3" @onclick="ReBuildPlayerList">
+                    Next
+                </button>
+            </div>
             break;
+
         case Tasks.GameOver:
             <div class="justify-content-center">
                 @foreach (Player player in Game.players)
                 {
-                    <div>
-                        @player.name has @player.points.
+                    <div class="text-center">
+                        @player.name has @player.points points.
                     </div>
                 }
 
                 @foreach (Player player in Game.giveUpPlayers)
                 {
-                    <div>
-                        @player.name has @player.points.
+                    <div class="text-center">
+                        @player.name has @player.points points.
                     </div>
                 }
 
+                <br />
 
                 @if (Game.players.Find(player => player.points == Game.highPoints) != null)
                 {
                     <div class="text-center">
-                        @Game.players.Find(player => player.points == Game.highPoints).Name  is the final winner!
+                        <h3>
+                            @Game.players.Find(player => player.points == Game.highPoints).Name  is the final winner!
+                        </h3>
                     </div>
                 }
                 else if (Game.giveUpPlayers.Find(player => player.points == Game.highPoints) != null)
                 {
                     <div class="text-center">
-                        @Game.giveUpPlayers.Find(player => player.points == Game.highPoints).Name  is the final winner!
+                        <h3>
+                            @Game.giveUpPlayers.Find(player => player.points == Game.highPoints).Name  is the final winner!
+                        </h3>
                     </div>
                 }
 
-            <div class="justify-content-center">
-                <button class="btn btn-primary mt-3" @onclick="() => { Game.nextTask = Tasks.GetNumberOfPlayers; }">
-                    Reset
-                </button>
-            </div>
+                <div class="row justify-content-center">
+                    <button class="btn btn-primary mt-3" @onclick="ResetGame">
+                        Reset
+                    </button>
+                </div>
 
             </div>
 
@@ -337,8 +341,6 @@
     }
 
     string[] playerNames = new string[8];
-
-    bool[] buttonIsDisable = new bool[8];
 
     int drawCardsNumber;
 
@@ -413,16 +415,27 @@
             if (winner != null) // If there is a winner
             {
                 Game.currentPlayer = 0;
+                int highPoints = 0;
 
                 lastTotalPlayers = Game.players.Count;
                 for (int i = 0; i < Game.players.Count; i++)
                 {
-                    if (Game.players[i].points > Game.highPoints)
+                    if (Game.players[i].points > highPoints)
                     {
-                        Game.highPoints = Game.players[i].points;
+                        highPoints = Game.players[i].points;
                     }
                 }
-                Game.nextTask = Tasks.CheckForEnd;
+                Game.highPoints = highPoints;
+
+                if (Game.highPoints < Game.pointsToGameOver)
+                {
+                    Game.nextTask = Tasks.CheckForEnd;
+                }
+                else
+                {
+                    Game.nextTask = Tasks.GameOver;
+                }
+
 
             }
             else // There is no winner
@@ -490,6 +503,20 @@
             Game.nextTask = Tasks.GameOver;
         }
 
+    }
+
+    private void ResetGame()
+    {
+        Game.players = new List<Player>();
+        Game.giveUpPlayers = new List<Player>();
+        Game.numberOfPlayers = 2;
+        Game.deck.buildDeck();
+        Game.deck.Shuffle();
+
+        drawCardsNumber = 0;
+        playerNames = new string[8];
+
+        Game.nextTask = Tasks.GetNumberOfPlayers;
     }
 
 }
