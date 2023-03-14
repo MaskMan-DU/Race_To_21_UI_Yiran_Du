@@ -1,9 +1,17 @@
 ﻿@page "/"
 
 <style>
-    tr {
-        text-align: center;
+    
+
+    table{
+        text-align:center
     }
+
+    thead {
+        font-weight: bold;
+        font-size: 16px;
+    }
+
 </style>
 
 <div class="container">
@@ -31,13 +39,21 @@
                 int playerNumnber = i;
                 <div class=" row justify-content-center">
                     <h3>Player#@(i + 1): </h3>
-                    <input type="text" @bind-value="playerNames[playerNumnber]" />
+                    <input type="text" placeholder="Enter your name" @bind-value="playerNames[playerNumnber]" />
 
                 </div>
             }
 
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger mt-3" role="alert">
+                    @errorMessage
+                </div>
+            }
+
+
             <div class="row justify-content-center">
-                <button type="button" class="btn btn-primary mt-3" @onclick="() => { AddPlayers(); Game.nextTask = Tasks.PlayerTurn; }">
+                <button type="button" class="btn btn-primary mt-3" @onclick="() => { AddPlayers(); }">
                     Add Players
                 </button>
 
@@ -48,6 +64,8 @@
 
             break;
         case Tasks.PlayerTurn:
+
+            
             <h2 class="text-center">The final winner will be the one who has more than 60 points!</h2>
             <h2 class="text-center">If everyone quits early, or if only one player is present, the player who has the highest points wins！</h2>
 
@@ -56,93 +74,190 @@
             @if (Game.players.Count < 5)
             {
                 <table class="table table-bordered justify-content-center">
-                    @foreach (Player player in Game.players)
-                    {
-                        <td class="col-3" style="text-align:center">
-                        <tr class="border">@player.Name</tr>
-                        <tr class="border">@player.status</tr>
-                        <tr class="border">
-
-                            <div class="text-center">
-                                Hands:
-                            </div>
-
-
-                            @foreach (Card card in player.cards)
+                    <thead>
+                        <tr class="col-3">
+                            @foreach (Player player in Game.players)
                             {
+                                <td>@player.name</td>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="col-3">
+                            @foreach (Player player in Game.players)
+                            {
+                                <td>@player.status</td>
+                            }
+                        </tr>
+                        <tr class="col-3">
+                            @foreach (Player player in Game.players)
+                            {
+                                <td>
+                                    <div class="text-center">
+                                        Hands:
+                                    </div>
 
-                                <img src="card_assets/@card.FullName" />
+
+                                    @foreach (Card card in player.cards)
+                                    {
+
+                                        <img src="card_assets/@card.FullName" />
+
+                                    }
+                                </td>
+
 
                             }
-
-
                         </tr>
-                        <tr class="border">Score: @player.score</tr>
-                        <tr class="border">Points: @player.points</tr>
-                        </td>
-                    }
+                        <tr class="col-3">
+                            @foreach (Player player in Game.players)
+                            {
+                                <td>
+                                    Score: @player.score
+                                </td>
+
+
+                            }
+                        </tr>
+                        <tr class="col-3">
+                            @foreach (Player player in Game.players)
+                            {
+                                <td>
+                                    Points:  @player.points
+                                </td>
+                            }
+                        </tr>
+
+                    </tbody>
                 </table>
             }
             else
             {
                 <table class="table table-bordered justify-content-center">
-                    @for (int i = 0; i < 4; i++)
-                    {
-                        <td class="col-3" style="text-align:center">
-                        <tr class="border">@Game.players[i].Name</tr>
-                        <tr class="border">@Game.players[i].status</tr>
-                        <tr class="border">
-
-                            <div class="text-center">
-                                Hands:
-                            </div>
-
-
-                            @foreach (Card card in Game.players[i].cards)
+                    <thead>
+                        <tr class="col-3">
+                            @for (int i = 0; i < 4; i++)
                             {
+                                <td>@Game.players[i].name</td>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="col-3">
+                            @for (int i = 0; i < 4; i++)
+                            {
+                                <td>@Game.players[i].status</td>
 
-                                <img src="card_assets/@card.FullName" />
 
                             }
-
-
                         </tr>
-                        <tr class="border">Score: @Game.players[i].score</tr>
-                        <tr class="border">Points: @Game.players[i].points</tr>
-                        </td>
-                    }
+                        <tr class="col-3">
+                            @for (int i = 0; i < 4; i++)
+                            {
+                                <td>
+                                    <div class="text-center">
+                                        Hands:
+                                    </div>
+
+
+                                    @foreach (Card card in Game.players[i].cards)
+                                    {
+
+                                        <img src="card_assets/@card.FullName" />
+
+                                    }
+                                </td>
+
+
+                            }
+                        </tr>
+                        <tr class="col-3">
+                            @for (int i = 0; i < 4; i++)
+                            {
+                                <td>
+                                    Score: @Game.players[i].score
+                                </td>
+
+
+                            }
+                        </tr>
+                        <tr class="col-3">
+                            @for (int i = 0; i < 4; i++)
+                            {
+                                <td>
+                                    Points:  @Game.players[i].points
+                                </td>
+                            }
+                        </tr>
+
+                    </tbody>
+
                 </table>
 
                 <table class="table table-bordered justify-content-center">
-                    @for (int i = 4; i < Game.players.Count; i++)
-                    {
-                        <td class="col-3" style="text-align:center">
-                        <tr class="border">@Game.players[i].Name</tr>
-                        <tr class="border">@Game.players[i].status</tr>
-                        <tr class="border">
-
-                            <div class="text-center">
-                                Hands:
-                            </div>
-
-
-                            @foreach (Card card in Game.players[i].cards)
+                    <thead>
+                        <tr class="col-3">
+                            @for (int i = 4; i < Game.players.Count; i++)
                             {
+                                <td>@Game.players[i].name</td>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="col-3">
+                            @for (int i = 4; i < Game.players.Count; i++)
+                            {
+                                <td>@Game.players[i].status</td>
 
-                                <img src="card_assets/@card.FullName" />
 
                             }
-
-
                         </tr>
-                        <tr class="border">Score: @Game.players[i].score</tr>
-                        <tr class="border">Points: @Game.players[i].points</tr>
-                        </td>
-                    }
+                        <tr class="col-3">
+                            @for (int i = 4; i < Game.players.Count; i++)
+                            {
+                                <td>
+                                    <div class="text-center">
+                                        Hands:
+                                    </div>
+
+
+                                    @foreach (Card card in Game.players[i].cards)
+                                    {
+
+                                        <img src="card_assets/@card.FullName" />
+
+                                    }
+                                </td>
+
+
+                            }
+                        </tr>
+                        <tr class="col-3">
+                            @for (int i = 4; i < Game.players.Count; i++)
+                            {
+                                <td>
+                                    Score: @Game.players[i].score
+                                </td>
+
+
+                            }
+                        </tr>
+                        <tr class="col-3">
+                            @for (int i = 4; i < Game.players.Count; i++)
+                            {
+                                <td>
+                                    Points:  @Game.players[i].points
+                                </td>
+                            }
+                        </tr>
+
+                    </tbody>
+
                 </table>
 
             }
 
+            <hr />
 
             <div class="row justify-content-center">
                 <input type="range" min="0" max="3" @bind="drawCardsNumber" />
@@ -150,12 +265,24 @@
             </div>
 
 
-            <div class="text-center">
-                Player "@Game.players[Game.currentPlayer].Name" draw cards!
-            </div>
+
+            @if (Game.players[Game.currentPlayer].status == PlayerStatus.active)
+            {
+                <div class="text-center">
+                    Player "@Game.players[Game.currentPlayer].Name" draw cards!
+                </div>
+            }
+            else
+            {
+                <div class="text-center">
+                    "@Game.players[Game.currentPlayer].Name", you can not draw cards, click the button to go to the next player!
+                </div>
+            }
+
+
 
             <div class="row justify-content-center">
-                <button type="button" class="btn btn-primary mt-3" @onclick="() => { PlayerDrawCards(drawCardsNumber); CheckWinner(); }">
+                <button type="button" class="btn btn-primary mt-3" @onclick="() => { PlayerDrawCards(drawCardsNumber); CheckWinner();  }">
                     Draw Cards
                 </button>
             </div>
@@ -168,94 +295,192 @@
             @if (Game.players.Count < 5)
             {
                 <table class="table table-bordered justify-content-center">
-                    @foreach (Player player in Game.players)
-                    {
-                        <td class="col-3 justify-content-center">
-                        <tr class="border">@player.Name</tr>
-                        <tr class="border">@player.status</tr>
-                        <tr class="border">
-
-                            <div class="text-center">
-                                Hands:
-                            </div>
-
-
-                            @foreach (Card card in player.cards)
+                    <thead>
+                        <tr class="col-3">
+                            @foreach (Player player in Game.players)
                             {
+                                <td>@player.name</td>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="col-3">
+                            @foreach (Player player in Game.players)
+                            {
+                                <td>@player.status</td>
 
-                                <img src="card_assets/@card.FullName" />
 
                             }
-
-
                         </tr>
-                        <tr class="border">Score: @player.score</tr>
-                        <tr class="border">Points: @player.points</tr>
-                        </td>
-                    }
+                        <tr class="col-3">
+                            @foreach (Player player in Game.players)
+                            {
+                                <td>
+                                    <div class="text-center">
+                                        Hands:
+                                    </div>
+
+
+                                    @foreach (Card card in player.cards)
+                                    {
+
+                                        <img src="card_assets/@card.FullName" />
+
+                                    }
+                                </td>
+
+
+                            }
+                        </tr>
+                        <tr class="col-3">
+                            @foreach (Player player in Game.players)
+                            {
+                                <td>
+                                    Score: @player.score
+                                </td>
+
+
+                            }
+                        </tr>
+                        <tr class="col-3">
+                            @foreach (Player player in Game.players)
+                            {
+                                <td>
+                                    Points:  @player.points
+                                </td>
+                            }
+                        </tr>
+
+                    </tbody>
                 </table>
             }
             else
             {
                 <table class="table table-bordered justify-content-center">
-                    @for (int i = 0; i < 4; i++)
-                    {
-                        <td class="col-3 justify-content-center">
-                        <tr class="border">@Game.players[i].Name</tr>
-                        <tr class="border">@Game.players[i].status</tr>
-                        <tr class="border">
-
-                            <div class="text-center">
-                                Hands:
-                            </div>
-
-
-                            @foreach (Card card in Game.players[i].cards)
+                    <thead>
+                        <tr class="col-3">
+                            @for (int i = 0; i < 4; i++)
                             {
+                                <td>@Game.players[i].name</td>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="col-3">
+                            @for (int i = 0; i < 4; i++)
+                            {
+                                <td>@Game.players[i].status</td>
 
-                                <img src="card_assets/@card.FullName" />
 
                             }
-
-
                         </tr>
-                        <tr class="border">Score: @Game.players[i].score</tr>
-                        <tr class="border">Points: @Game.players[i].points</tr>
-                        </td>
-                    }
+                        <tr class="col-3">
+                            @for (int i = 0; i < 4; i++)
+                            {
+                                <td>
+                                    <div class="text-center">
+                                        Hands:
+                                    </div>
+
+
+                                    @foreach (Card card in Game.players[i].cards)
+                                    {
+
+                                        <img src="card_assets/@card.FullName" />
+
+                                    }
+                                </td>
+
+
+                            }
+                        </tr>
+                        <tr class="col-3">
+                            @for (int i = 0; i < 4; i++)
+                            {
+                                <td>
+                                    Score: @Game.players[i].score
+                                </td>
+
+
+                            }
+                        </tr>
+                        <tr class="col-3">
+                            @for (int i = 0; i < 4; i++)
+                            {
+                                <td>
+                                    Points:  @Game.players[i].points
+                                </td>
+                            }
+                        </tr>
+
+                    </tbody>
+
                 </table>
 
                 <table class="table table-bordered justify-content-center">
-                    @for (int i = 4; i < Game.players.Count; i++)
-                    {
-                        <td class="col-3 justify-content-center">
-                        <tr class="border">@Game.players[i].Name</tr>
-                        <tr class="border">@Game.players[i].status</tr>
-                        <tr class="border">
-
-                            <div class="text-center">
-                                Hands:
-                            </div>
-
-
-                            @foreach (Card card in Game.players[i].cards)
+                    <thead>
+                        <tr class="col-3">
+                            @for (int i = 4; i < Game.players.Count; i++)
                             {
+                                <td>@Game.players[i].name</td>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="col-3">
+                            @for (int i = 4; i < Game.players.Count; i++)
+                            {
+                                <td>@Game.players[i].status</td>
 
-                                <img src="card_assets/@card.FullName" />
 
                             }
-
-
                         </tr>
-                        <tr class="border">Score: @Game.players[i].score</tr>
-                        <tr class="border">Points: @Game.players[i].points</tr>
-                        </td>
-                    }
+                        <tr class="col-3">
+                            @for (int i = 4; i < Game.players.Count; i++)
+                            {
+                                <td>
+                                    <div class="text-center">
+                                        Hands:
+                                    </div>
+
+
+                                    @foreach (Card card in Game.players[i].cards)
+                                    {
+
+                                        <img src="card_assets/@card.FullName" />
+
+                                    }
+                                </td>
+
+
+                            }
+                        </tr>
+                        <tr class="col-3">
+                            @for (int i = 4; i < Game.players.Count; i++)
+                            {
+                                <td>
+                                    Score: @Game.players[i].score
+                                </td>
+
+
+                            }
+                        </tr>
+                        <tr class="col-3">
+                            @for (int i = 4; i < Game.players.Count; i++)
+                            {
+                                <td>
+                                    Points:  @Game.players[i].points
+                                </td>
+                            }
+                        </tr>
+
+                    </tbody>
+
                 </table>
 
             }
 
-            <br />
+            <hr />
 
             <h2 class="text-center">
                 Do you want to play another round?
@@ -297,7 +522,7 @@
                     </div>
                 }
 
-                <br />
+                <hr />
 
                 @if (Game.players.Find(player => player.points == Game.highPoints) != null)
                 {
@@ -342,16 +567,34 @@
 
     string[] playerNames = new string[8];
 
+    string errorMessage = "";
+
     int drawCardsNumber;
 
     int lastTotalPlayers;
 
+    private bool IsNameValid()
+    {
+        if (playerNames.Take(Game.numberOfPlayers).GroupBy(name => name).Any(group => group.Count() > 1))
+        {
+            errorMessage = "Please make sure all player names are unique.";
+            return false;
+        }
+
+        return true;
+    }
+
     private void AddPlayers()
     {
-        for (int i = 0; i < Game.numberOfPlayers; i++)
+        if (IsNameValid())
         {
-            Game.AddPlayer(playerNames[i]);
+            for (int i = 0; i < Game.numberOfPlayers; i++)
+            {
+                Game.AddPlayer(playerNames[i]);
+            }
+            Game.nextTask = Tasks.PlayerTurn;
         }
+
     }
 
     private void PlayerDrawCards(int drawCardsNumber)
