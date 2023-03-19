@@ -1,10 +1,10 @@
 ﻿@page "/"
 
 <style>
-    
 
-    table{
-        text-align:center
+
+    table {
+        text-align: center
     }
 
     thead {
@@ -12,6 +12,15 @@
         font-size: 16px;
     }
 
+    .btn-success.active {
+        border: 4px solid;
+        background-color: #00710e;
+    }
+
+    .btn-danger.active {
+        border: 4px solid;
+        background-color: #7c0000;
+    }
 </style>
 
 <div class="container">
@@ -21,9 +30,17 @@
     @switch (Game.nextTask)
     {
         case Tasks.GetNumberOfPlayers:
-            <h2 class="text-center">How many players?</h2>
+
+            <hr />
+
+            <p class="text-center">This game requires 2-6 players to participate.</p>
+
+            <hr />
+
+
+            <h3 class="text-center">How many players?</h3>
             <div class="row justify-content-center">
-                <input type="number" class="col-2" min="2" max="8" @bind="Game.numberOfPlayers" />
+                <input type="number" class="col-2" min="2" max="6" @bind="Game.numberOfPlayers" />
             </div>
 
             <div class="row justify-content-center">
@@ -34,6 +51,14 @@
             break;
 
         case Tasks.GetNames:
+
+            <hr />
+
+            <p class="text-center">Each player's name should be different.</p>
+
+            <hr />
+
+
             @for (int i = 0; i < Game.numberOfPlayers; i++)
             {
                 int playerNumnber = i;
@@ -65,13 +90,20 @@
             break;
         case Tasks.PlayerTurn:
 
-            
-            <h2 class="text-center">The final winner will be the one who has more than 60 points!</h2>
-            <h2 class="text-center">If everyone quits early, or if only one player is present, the player who has the highest points wins！</h2>
+            <hr />
+            <p class="text-center">When a player draws a card, he or she can choose to draw 0-3 cards.</p>
+            <p class="text-center">If the player chooses to draw 0 cards, the player's status changes to "Stay" and no more cards can be drawn.</p>
+            <p class="text-center">If the total number of points in a player's hand exceeds 21, the player's status changes to "Bust" and he/she cannot draw any more cards.</p>
+            <p class="text-center">When the total number of points in a player's hand is 21, the player wins and the turn ends.</p>
+
+            <hr />
+
+            <p></p>
+
+            <hr />
 
 
-
-            @if (Game.players.Count < 5)
+            @if (Game.players.Count < 4)
             {
                 <table class="table table-bordered justify-content-center">
                     <thead>
@@ -136,7 +168,7 @@
                 <table class="table table-bordered justify-content-center">
                     <thead>
                         <tr class="col-3">
-                            @for (int i = 0; i < 4; i++)
+                            @for (int i = 0; i < 3; i++)
                             {
                                 <td>@Game.players[i].name</td>
                             }
@@ -144,7 +176,7 @@
                     </thead>
                     <tbody>
                         <tr class="col-3">
-                            @for (int i = 0; i < 4; i++)
+                            @for (int i = 0; i < 3; i++)
                             {
                                 <td>@Game.players[i].status</td>
 
@@ -152,7 +184,7 @@
                             }
                         </tr>
                         <tr class="col-3">
-                            @for (int i = 0; i < 4; i++)
+                            @for (int i = 0; i < 3; i++)
                             {
                                 <td>
                                     <div class="text-center">
@@ -172,7 +204,7 @@
                             }
                         </tr>
                         <tr class="col-3">
-                            @for (int i = 0; i < 4; i++)
+                            @for (int i = 0; i < 3; i++)
                             {
                                 <td>
                                     Score: @Game.players[i].score
@@ -182,7 +214,7 @@
                             }
                         </tr>
                         <tr class="col-3">
-                            @for (int i = 0; i < 4; i++)
+                            @for (int i = 0; i < 3; i++)
                             {
                                 <td>
                                     Points:  @Game.players[i].points
@@ -197,7 +229,7 @@
                 <table class="table table-bordered justify-content-center">
                     <thead>
                         <tr class="col-3">
-                            @for (int i = 4; i < Game.players.Count; i++)
+                            @for (int i = 3; i < Game.players.Count; i++)
                             {
                                 <td>@Game.players[i].name</td>
                             }
@@ -205,7 +237,7 @@
                     </thead>
                     <tbody>
                         <tr class="col-3">
-                            @for (int i = 4; i < Game.players.Count; i++)
+                            @for (int i = 3; i < Game.players.Count; i++)
                             {
                                 <td>@Game.players[i].status</td>
 
@@ -213,7 +245,7 @@
                             }
                         </tr>
                         <tr class="col-3">
-                            @for (int i = 4; i < Game.players.Count; i++)
+                            @for (int i = 3; i < Game.players.Count; i++)
                             {
                                 <td>
                                     <div class="text-center">
@@ -233,7 +265,7 @@
                             }
                         </tr>
                         <tr class="col-3">
-                            @for (int i = 4; i < Game.players.Count; i++)
+                            @for (int i = 3; i < Game.players.Count; i++)
                             {
                                 <td>
                                     Score: @Game.players[i].score
@@ -243,7 +275,7 @@
                             }
                         </tr>
                         <tr class="col-3">
-                            @for (int i = 4; i < Game.players.Count; i++)
+                            @for (int i = 3; i < Game.players.Count; i++)
                             {
                                 <td>
                                     Points:  @Game.players[i].points
@@ -269,13 +301,13 @@
             @if (Game.players[Game.currentPlayer].status == PlayerStatus.active)
             {
                 <div class="text-center">
-                    Player "@Game.players[Game.currentPlayer].Name" draw cards!
+                    <h3>Player <b>"@Game.players[Game.currentPlayer].Name"</b> draw cards!</h3>
                 </div>
             }
             else
             {
                 <div class="text-center">
-                    "@Game.players[Game.currentPlayer].Name", you can not draw cards, click the button to go to the next player!
+                    <h3><b>"@Game.players[Game.currentPlayer].Name"</b>, you can not draw cards, click the button to go to the next player!</h3>
                 </div>
             }
 
@@ -292,7 +324,13 @@
 
         case Tasks.CheckForEnd:
 
-            @if (Game.players.Count < 5)
+            <hr />
+            <p class="text-center">The game will end when either of the two cases occurs during the game.</p>
+            <p class="text-center">Case 1: One player has more than 60 points.</p>
+            <p class="text-center">Case 2: The number of players on the field is less than or equal to one.</p>
+            <hr />
+
+            @if (Game.players.Count < 4)
             {
                 <table class="table table-bordered justify-content-center">
                     <thead>
@@ -359,7 +397,7 @@
                 <table class="table table-bordered justify-content-center">
                     <thead>
                         <tr class="col-3">
-                            @for (int i = 0; i < 4; i++)
+                            @for (int i = 0; i < 3; i++)
                             {
                                 <td>@Game.players[i].name</td>
                             }
@@ -367,7 +405,7 @@
                     </thead>
                     <tbody>
                         <tr class="col-3">
-                            @for (int i = 0; i < 4; i++)
+                            @for (int i = 0; i < 3; i++)
                             {
                                 <td>@Game.players[i].status</td>
 
@@ -375,7 +413,7 @@
                             }
                         </tr>
                         <tr class="col-3">
-                            @for (int i = 0; i < 4; i++)
+                            @for (int i = 0; i < 3; i++)
                             {
                                 <td>
                                     <div class="text-center">
@@ -395,7 +433,7 @@
                             }
                         </tr>
                         <tr class="col-3">
-                            @for (int i = 0; i < 4; i++)
+                            @for (int i = 0; i < 3; i++)
                             {
                                 <td>
                                     Score: @Game.players[i].score
@@ -405,7 +443,7 @@
                             }
                         </tr>
                         <tr class="col-3">
-                            @for (int i = 0; i < 4; i++)
+                            @for (int i = 0; i < 3; i++)
                             {
                                 <td>
                                     Points:  @Game.players[i].points
@@ -420,7 +458,7 @@
                 <table class="table table-bordered justify-content-center">
                     <thead>
                         <tr class="col-3">
-                            @for (int i = 4; i < Game.players.Count; i++)
+                            @for (int i = 3; i < Game.players.Count; i++)
                             {
                                 <td>@Game.players[i].name</td>
                             }
@@ -428,7 +466,7 @@
                     </thead>
                     <tbody>
                         <tr class="col-3">
-                            @for (int i = 4; i < Game.players.Count; i++)
+                            @for (int i = 3; i < Game.players.Count; i++)
                             {
                                 <td>@Game.players[i].status</td>
 
@@ -436,7 +474,7 @@
                             }
                         </tr>
                         <tr class="col-3">
-                            @for (int i = 4; i < Game.players.Count; i++)
+                            @for (int i = 3; i < Game.players.Count; i++)
                             {
                                 <td>
                                     <div class="text-center">
@@ -456,7 +494,7 @@
                             }
                         </tr>
                         <tr class="col-3">
-                            @for (int i = 4; i < Game.players.Count; i++)
+                            @for (int i = 3; i < Game.players.Count; i++)
                             {
                                 <td>
                                     Score: @Game.players[i].score
@@ -466,7 +504,7 @@
                             }
                         </tr>
                         <tr class="col-3">
-                            @for (int i = 4; i < Game.players.Count; i++)
+                            @for (int i = 3; i < Game.players.Count; i++)
                             {
                                 <td>
                                     Points:  @Game.players[i].points
@@ -495,7 +533,8 @@
                     @Game.players[playerIndex].Name
                 </label>
 
-                <input type="checkbox" @bind="Game.players[playerIndex].isContinue" />
+                <button type="button" class="btn btn-success @((Game.players[playerIndex].isContinue == true) ? "active" : "")" @onclick="() => { Game.players[playerIndex].isContinue = true; }">Yes</button>
+                <button type="button" class="btn btn-danger @((Game.players[playerIndex].isContinue == false) ? "active" : "")" @onclick="() => { Game.players[playerIndex].isContinue = false; }">No</button>
 
             }
 
@@ -565,7 +604,7 @@
 
     }
 
-    string[] playerNames = new string[8];
+    string[] playerNames = new string[6];
 
     string errorMessage = "";
 
