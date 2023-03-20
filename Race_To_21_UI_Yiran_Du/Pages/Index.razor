@@ -612,6 +612,10 @@
 
     int lastTotalPlayers;
 
+    /// <summary>
+    /// Check for duplicate names 
+    /// </summary>
+    /// <returns>If not, return true. Otherwise, false.</returns>
     private bool IsNameValid()
     {
         if (playerNames.Take(Game.numberOfPlayers).GroupBy(name => name).Any(group => group.Count() > 1))
@@ -623,6 +627,9 @@
         return true;
     }
 
+    /// <summary>
+    /// Add players to player list
+    /// </summary>
     private void AddPlayers()
     {
         if (IsNameValid())
@@ -636,6 +643,10 @@
 
     }
 
+    /// <summary>
+    /// Dealing to players when the player's status is "active"
+    /// </summary>
+    /// <param name="drawCardsNumber">How many cards the play want to draw</param>
     private void PlayerDrawCards(int drawCardsNumber)
     {
         Player player = Game.players[Game.currentPlayer];
@@ -680,6 +691,10 @@
     }
 
 
+    /// <summary>
+    /// Check all win condition, and figure out if there is a winner.
+    /// If there is a winner, go to the next page.
+    /// </summary>
     private void CheckWinner()
     {
         if (!Game.CheckActivePlayers()) // No players' status is active
@@ -751,6 +766,13 @@
         }
     }
 
+
+    /// <summary>
+    /// Check all players, if a player decide to continue play th game, then reset the player hands, score and make the players status be "active". 
+    /// If a player don't want to continue, then remove that player to another list.
+    /// If the number of player minus and more than 1, then shuffle the player list, rebuild the deck and shuffle the deck.
+    /// If the number of player equal or less than 1, then Game Over.
+    /// </summary>
     private void ReBuildPlayerList()
     {
         for (int i = 0; i < Game.players.Count; i++)
@@ -787,6 +809,10 @@
 
     }
 
+
+    /// <summary>
+    /// Clear all information about the game and go back to the start page
+    /// </summary>
     private void ResetGame()
     {
         Game.players = new List<Player>();
